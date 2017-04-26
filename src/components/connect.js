@@ -3,13 +3,21 @@ import React from 'react'
 import {appShape} from '../PropTypes'
 import type {AppContext} from '../types'
 
-const connect = (WrappedComponent: ReactClass<AppContext>) => class Connect extends React.Component {
-  static contextTypes = appShape
+const getDisplayName = (WrappedComponent: ReactClass<any>): string =>
+  WrappedComponent.displayName ||
+  WrappedComponent.name ||
+  'Component'
 
-  context: AppContext;
+const connect = (WrappedComponent: ReactClass<AppContext>) => {
+  return class Connect extends React.Component {
+    static displayName = `Connect(${getDisplayName(WrappedComponent)})`
+    static contextTypes = appShape
 
-  render() {
-    return <WrappedComponent {...this.context} />
+    context: AppContext;
+
+    render() {
+      return <WrappedComponent {...this.context} />
+    }
   }
 }
 

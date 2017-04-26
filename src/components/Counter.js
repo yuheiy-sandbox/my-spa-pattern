@@ -1,32 +1,28 @@
 // @flow
 import React from 'react'
 import connect from './connect'
+import type {AppContext} from '../types'
 
-class Counter extends React.Component {
-  render() {
-    const {appState, dispatch} = this.props
-
-    const handleClickIncrement = () => {
-      dispatch({
-        type: 'increment-counter',
-      })
-    }
-
-    const handleClickDecrement = () => {
-      dispatch({
-        type: 'decrement-counter',
-      })
-    }
-
-    return <div>
-      <p>count: {appState.count}</p>
-      <p>
-        <button type="button" onClick={handleClickIncrement}>increment</button>
-        {' '}
-        <button type="button" onClick={handleClickDecrement}>decrement</button>
-      </p>
-    </div>
-  }
+function Counter({count, increment, decrement}) {
+  return <div>
+    <p>count: {count}</p>
+    <p>
+      <button type="button" onClick={increment}>increment</button>
+      {' '}
+      <button type="button" onClick={decrement}>decrement</button>
+    </p>
+  </div>
 }
+
+Counter = (fn => {
+  return ({appState: {count}, dispatch}: AppContext) => {
+    return fn({
+      count,
+      increment: () => dispatch({type: 'increment-counter'}),
+      decrement: () => dispatch({type: 'decrement-counter'}),
+    })
+  }
+})(Counter)
+Counter.displayName = 'Counter'
 
 export default connect(Counter)

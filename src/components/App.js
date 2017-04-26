@@ -9,27 +9,21 @@ const initialState = {
 }
 
 export default class App extends React.Component<void, {}, AppState> {
-  dispatch: Dispatch;
-
   static childContextTypes = appShape
 
   state = initialState
 
-  constructor(...args: any) {
-    super(...args)
+  dispatch: Dispatch = (action) => {
+    switch (action.type) {
 
-    this.dispatch = (action) => {
-      switch (action.type) {
+    case 'increment-counter':
+      this.setState({count: this.state.count + 1})
+      return
 
-      case 'increment-counter':
-        this.setState({count: this.state.count + 1})
-        return
+    case 'decrement-counter':
+      this.setState({count: this.state.count - 1})
+      return
 
-      case 'decrement-counter':
-        this.setState({count: this.state.count - 1})
-        return
-
-      }
     }
   }
 
